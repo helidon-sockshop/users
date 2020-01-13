@@ -1,0 +1,4 @@
+security:
+  providers:
+  - http-basic-auth:
+      realm: "weavesocks"
