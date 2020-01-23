@@ -120,8 +120,11 @@ public class MongoUserRepository extends DefaultUserRepository {
 
     @Override
     public User register(User user) {
-        users.insertOne(new MongoUser(user));
-        return user;
+        User existing = findUser(user.getUsername());
+        if (existing == null) {
+            users.insertOne(new MongoUser(user));
+        }
+        return existing;
     }
 
     // --- helpers ----------------------------------------------------------
