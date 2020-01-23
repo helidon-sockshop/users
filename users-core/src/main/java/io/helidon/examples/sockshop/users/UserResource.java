@@ -74,11 +74,11 @@ public class UserResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     public Response register(User user) {
-        User prev = users.register(user.getId(), user);
+        User prev = users.register(user);
         if (prev != null) {
             return Response.status(CONFLICT).entity("User with that ID already exists").build();
         }
-        return Response.ok(obj().add("id", user.getId()).build()).build();
+        return Response.ok(obj().add("id", user.getUsername()).build()).build();
     }
 
     // ---- helpers ---------------------------------------------------------

@@ -99,8 +99,16 @@ public class Card implements Serializable {
             return customerId;
         }
 
+        public void setCustomerId(String customerId) {
+            this.customerId = customerId;
+        }
+
         public String getCardId() {
             return cardId;
+        }
+
+        public void setCardId(String cardId) {
+            this.cardId = cardId;
         }
 
         @Override

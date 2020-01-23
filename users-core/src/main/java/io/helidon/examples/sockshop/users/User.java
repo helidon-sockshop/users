@@ -17,8 +17,6 @@ public class User implements Serializable {
     private Map<Address.Id, Address> addresses = new LinkedHashMap<>();
     private Map<Card.Id, Card> cards = new LinkedHashMap<>();
 
-    private int nextAddressId = 1;
-
     public User() {
     }
 
@@ -30,12 +28,15 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getId() {
-        return username;
-    }
-
-    public void setId(String id) {
-        this.username = id;
+    protected User(String firstName, String lastName, String email, String username, String password,
+                Collection<Address> addresses, Collection<Card> cards) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        addresses.forEach(this::addAddress);
+        cards.forEach(this::addCard);
     }
 
     public String getFirstName() {
@@ -90,7 +91,7 @@ public class User implements Serializable {
 
     public Address addAddress(Address address) {
         if (address.getId() == null) {
-            address.setId(new Address.Id(getId(), nextAddressId++));
+            address.setId(new Address.Id(username, addresses.size() + 1));
         }
         addresses.put(address.getId(), address);
         return address;
@@ -112,7 +113,7 @@ public class User implements Serializable {
 
     public Card addCard(Card card) {
         if (card.getId() == null) {
-            card.setId(new Card.Id(getId(), card.last4()));
+            card.setId(new Card.Id(username, card.last4()));
         }
         cards.put(card.getId(), card);
         return card;
@@ -125,7 +126,7 @@ public class User implements Serializable {
 
     @JsonbProperty("_links")
     public Links getLinks() {
-        return Links.customer(getId());
+        return Links.customer(username);
     }
 
     public Boolean authenticate(String password) {

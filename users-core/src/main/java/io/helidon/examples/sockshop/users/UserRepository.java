@@ -19,5 +19,5 @@ public interface UserRepository {
     User removeUser(String id);
 
     boolean authenticate(String username, String password);
-    User register(String id, User user);
+    User register(User user);
 }
