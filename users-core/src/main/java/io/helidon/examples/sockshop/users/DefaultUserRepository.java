@@ -7,10 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
+import org.eclipse.microprofile.opentracing.Traced;
+
 /**
  *
  */
 @ApplicationScoped
+@Traced
 public class DefaultUserRepository implements UserRepository {
     private Map<String, User> users = new ConcurrentHashMap<>();
 

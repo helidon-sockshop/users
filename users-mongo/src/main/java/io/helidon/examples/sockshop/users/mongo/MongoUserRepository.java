@@ -21,6 +21,7 @@ import io.helidon.examples.sockshop.users.User;
 import io.helidon.examples.sockshop.users.UserRepository;
 
 import com.mongodb.client.MongoCollection;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -29,6 +30,7 @@ import static com.mongodb.client.model.Filters.eq;
  */
 @ApplicationScoped
 @Specializes
+@Traced
 public class MongoUserRepository extends DefaultUserRepository {
     @Inject
     private MongoCollection<MongoUser> users;
