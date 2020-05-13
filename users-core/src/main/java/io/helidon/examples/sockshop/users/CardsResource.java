@@ -71,5 +71,16 @@ public class CardsResource {
         public String expires;
         public String ccv;
         public String userID;
+
+        public AddCardRequest()
+            {
+            }
+
+        public AddCardRequest(String longNum, String expires, String ccv, String userID) {
+            this.longNum = longNum;
+            this.expires = expires;
+            this.ccv = ccv;
+            this.userID = userID;
+        }
     }
 }

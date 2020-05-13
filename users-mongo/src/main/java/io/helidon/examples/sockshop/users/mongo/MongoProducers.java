@@ -33,7 +33,7 @@ public class MongoProducers {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applicationName("users")
                 .applyToClusterSettings(
-                        builder -> builder.hosts(Collections.singletonList(new ServerAddress("users-db", 27017))))
+                        builder -> builder.hosts(Collections.singletonList(new ServerAddress("localhost", 27017))))
                 .codecRegistry(pojoCodecRegistry)
                 .build();
         return MongoClients.create(settings);

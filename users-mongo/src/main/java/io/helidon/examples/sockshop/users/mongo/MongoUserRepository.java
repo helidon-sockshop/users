@@ -32,8 +32,13 @@ import static com.mongodb.client.model.Filters.eq;
 @Specializes
 @Traced
 public class MongoUserRepository extends DefaultUserRepository {
-    @Inject
+
     private MongoCollection<MongoUser> users;
+
+    @Inject
+    MongoUserRepository(MongoCollection<MongoUser> users) {
+        this.users = users;
+    }
 
     @Override
     public Address.Id addAddress(String userID, Address address) {

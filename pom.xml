@@ -12,6 +12,7 @@
     <modules>
         <module>users-core</module>
         <module>users-mongo</module>
+        <module>users-redis</module>
     </modules>
 
 </project>

@@ -15,7 +15,15 @@ import org.eclipse.microprofile.opentracing.Traced;
 @ApplicationScoped
 @Traced
 public class DefaultUserRepository implements UserRepository {
-    private Map<String, User> users = new ConcurrentHashMap<>();
+    private Map<String, User> users;
+
+    public DefaultUserRepository()  {
+    this(new ConcurrentHashMap<>());
+    }
+
+    public DefaultUserRepository(Map<String, User> users) {
+            this.users = users;
+        }
 
     @Override
     public Address.Id addAddress(String userID, Address address) {
@@ -77,8 +85,6 @@ public class DefaultUserRepository implements UserRepository {
     public User register(User user) {
         return users.putIfAbsent(user.getUsername(), user);
     }
-
-    // --- helpers ----------------------------------------------------------
 
     @PostConstruct
     public void createTestUsers() {

@@ -73,5 +73,14 @@ public class AddressesResource {
         public String postcode;
         public String country;
         public String userID;
+
+        public AddAddressRequest(String number, String street, String city, String postcode, String country, String userID) {
+            this.number = number;
+            this.street = street;
+            this.city = city;
+            this.postcode = postcode;
+            this.country = country;
+            this.userID = userID;
+            }
     }
 }
