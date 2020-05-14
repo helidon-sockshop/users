@@ -1,9 +1,7 @@
 package io.helidon.examples.sockshop.users;
 
 import io.helidon.microprofile.server.Server;
-
 import io.restassured.RestAssured;
-import io.restassured.mapper.ObjectMapperType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,19 +11,21 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static io.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 
 /**
- * Integration tests for {@link io.helidon.examples.sockshop.users.UserResource}.
+ * Integration tests for {@link CardsResource}.
  */
 
-public class UserResourceIT {
+public class CardsResourceIT
+    {
     private static Server SERVER;
     private UserRepository users;
 
     /**
      * This will start the application on ephemeral port to avoid port conflicts.
-     * We can discover the actual port by calling {@link io.helidon.microprofile.server.Server#port()} method afterwards.
+     * We can discover the actual port by calling {@link Server#port()} method afterwards.
      */
     @BeforeAll
     static void startServer() {
@@ -57,25 +57,53 @@ public class UserResourceIT {
     }
 
     @Test
-    public void testAuthentication() {
+    public void testRegisterCard() {
         users.register(new User("foo", "passfoo", "foo@weavesocks.com", "foouser", "pass"));
-        given().auth().preemptive().basic("foouser", "pass").
+        given().
+            contentType(JSON).
+            body(new CardsResource.AddCardRequest("3691369136913691", "01/21", "789", "foouser")).
         when().
-            get("/login").
+            post("/cards").
         then().
-            assertThat().
-            statusCode(200);
+            statusCode(200).
+            body("id", containsString("foouser"));
     }
 
     @Test
-    public void testRegister() {
+    public void testGetCard() {
+        User u = users.getOrCreate("cardUser");
+        u.setUsername("cardUser");
+        Card.Id cardId = u.addCard(new Card("3691369136913691", "01/21", "789")).getId();
+        users.register(u);
         given().
-            contentType(JSON).
-            body(new User("bar", "passbar", "bar@weavesocks.com", "baruser", "pass")).
+            pathParam("id", cardId.toString()).
         when().
-            post("/register").
+            get("/cards/{id}").
         then().
-            statusCode(200).
-            body("id", is("baruser"));
+            statusCode(OK.getStatusCode()).
+            body("longNum", containsString("3691"),
+                    "ccv", is("789"));
+    }
+
+    @Test
+    public void testDeleteCard() {
+        User u = users.getOrCreate("cardUser");
+        u.setUsername("cardUser");
+        Card.Id cardId = u.addCard(new Card("3691369136913691", "01/21", "789")).getId();
+        users.register(u);
+        given().
+            pathParam("id", cardId.toString()).
+        when().
+            get("/cards/{id}").
+        then().
+            statusCode(OK.getStatusCode());
+    }
+
+    @Test
+    public void testGetAllCards() {
+        when().
+            get("/cards").
+        then().
+            statusCode(OK.getStatusCode());
     }
 }

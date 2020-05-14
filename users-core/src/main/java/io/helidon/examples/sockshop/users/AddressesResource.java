@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import lombok.NoArgsConstructor;
 
 import static io.helidon.examples.sockshop.users.JsonHelpers.embed;
 import static io.helidon.examples.sockshop.users.JsonHelpers.obj;
@@ -66,6 +67,7 @@ public class AddressesResource {
         return Response.ok(obj().add("status", fSuccess).build()).build();
     }
 
+    @NoArgsConstructor
     public static class AddAddressRequest {
         public String number;
         public String street;

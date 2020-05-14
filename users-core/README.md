@@ -25,17 +25,12 @@ $ docker run -p 7001:7001 helidon/sockshop/users-core
 Once the container is up and running, you should be able to access [service API](../README.md#api) 
 by navigating to http://localhost:7001/.
 
-As a basic test, you should be able to perform an HTTP GET against `/register` endpoint:
+As a basic test, you should be able to perform an HTTP GET against `/cards` endpoint:
 
 ```bash
-$ curl http://localhost:7001/register
+$ curl http://localhost:7001/cards
 ``` 
-which should return JSON response
-```json
-{
-  "id": "user"
-}
-```
+which should return 200 response code.
 
 ## License
 

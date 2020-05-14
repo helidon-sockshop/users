@@ -10,17 +10,28 @@ import javax.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.opentracing.Traced;
 
 /**
- *
+ * Simple in-memory implementation of {@link io.helidon.examples.sockshop.users.UserRepository}
+ * that can be used for demos and testing.
+ * <p/>
+ * This implementation is obviously not suitable for production use, because it is not
+ * persistent and it doesn't scale, but it is trivial to write and very useful for the
+ * API testing and quick demos.
  */
 @ApplicationScoped
 @Traced
 public class DefaultUserRepository implements UserRepository {
     private Map<String, User> users;
 
+    /**
+     * Construct {@code DefaultUserRepository} with empty storage map.
+     */
     public DefaultUserRepository()  {
     this(new ConcurrentHashMap<>());
     }
 
+    /**
+     * Construct {@code DefaultUserRepository} with specified storage map.
+     */
     public DefaultUserRepository(Map<String, User> users) {
             this.users = users;
         }

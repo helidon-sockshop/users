@@ -6,22 +6,47 @@ import java.util.Objects;
 import javax.json.bind.adapter.JsonbAdapter;
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTypeAdapter;
+import javax.persistence.Embeddable;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@Embeddable
 public class Card implements Serializable {
+    /**
+     * The card id.
+     */
     private Id id;
+
+    /**
+     * The card number.
+     */
     private String longNum;
+
+    /**
+     * The expiration date.
+     */
     private String expires;
+
+    /**
+     * The security code.
+     */
     private String ccv;
 
-    public Card() {
-    }
-
+    @Builder
     public Card(String longNum, String expires, String ccv) {
         this.longNum = longNum;
         this.expires = expires;
         this.ccv = ccv;
     }
 
+    /**
+     * Return the card with masked card number.
+     *
+     * @return the card with masked card number
+     */
     public Card mask() {
         if (longNum != null) {
             int len = longNum.length() - 4;
@@ -30,40 +55,13 @@ public class Card implements Serializable {
         return this;
     }
 
+    /**
+     * Return the last 4 digit of the card number.
+     *
+     * @return the last 4 digit of the card number
+     */
     public String last4() {
         return longNum == null ? null : longNum.substring(longNum.length() - 4);
-    }
-
-    public Id getId() {
-        return id;
-    }
-
-    public void setId(Id id) {
-        this.id = id;
-    }
-
-    public String getLongNum() {
-        return longNum;
-    }
-
-    public void setLongNum(String longNum) {
-        this.longNum = longNum;
-    }
-
-    public String getExpires() {
-        return expires;
-    }
-
-    public void setExpires(String expires) {
-        this.expires = expires;
-    }
-
-    public String getCcv() {
-        return ccv;
-    }
-
-    public void setCcv(String ccv) {
-        this.ccv = ccv;
     }
 
     @JsonbProperty("_links")
@@ -73,42 +71,44 @@ public class Card implements Serializable {
                 : Links.card("");
     }
 
+    /**
+     * Card Id class.
+     */
     @JsonbTypeAdapter(Id.JsonAdapter.class)
     public static class Id implements Serializable {
+        /**
+         * The ID of the customer this card belongs to.
+         */
         private String customerId;
+
+        /**
+         * The first part of the card id.
+         */
         private String cardId;
 
-        public Id() {
-        }
-
+        @Builder
         public Id(String id) {
-            String[] parts = id.split(":");
-            if (parts.length != 2) {
-                throw new IllegalArgumentException("Card Id is in the wrong format");
+                String[] parts = id.split(":");
+                if (parts.length != 2) {
+                    throw new IllegalArgumentException("Card Id is in the wrong format");
+                }
+                customerId = parts[0];
+                cardId = parts[1];
             }
-            customerId = parts[0];
-            cardId = parts[1];
-        }
 
-        public Id(String customerId, String cardId) {
-            this.customerId = customerId;
-            this.cardId = cardId;
-        }
+            @Builder
+            public Id(String customerId, String cardId) {
+                this.customerId = customerId;
+                this.cardId = cardId;
+            }
 
+        /**
+         * Return the customer id.
+         *
+         * @return the customer id
+         */
         public String getCustomerId() {
             return customerId;
-        }
-
-        public void setCustomerId(String customerId) {
-            this.customerId = customerId;
-        }
-
-        public String getCardId() {
-            return cardId;
-        }
-
-        public void setCardId(String cardId) {
-            this.cardId = cardId;
         }
 
         @Override

@@ -1,9 +1,7 @@
 package io.helidon.examples.sockshop.users;
 
 import io.helidon.microprofile.server.Server;
-
 import io.restassured.RestAssured;
-import io.restassured.mapper.ObjectMapperType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,19 +11,21 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static io.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 
 /**
- * Integration tests for {@link io.helidon.examples.sockshop.users.UserResource}.
+ * Integration tests for {@link AddressesResource}.
  */
 
-public class UserResourceIT {
+public class AddressesResourceIT
+    {
     private static Server SERVER;
     private UserRepository users;
 
     /**
      * This will start the application on ephemeral port to avoid port conflicts.
-     * We can discover the actual port by calling {@link io.helidon.microprofile.server.Server#port()} method afterwards.
+     * We can discover the actual port by calling {@link Server#port()} method afterwards.
      */
     @BeforeAll
     static void startServer() {
@@ -57,25 +57,46 @@ public class UserResourceIT {
     }
 
     @Test
-    public void testAuthentication() {
+    public void testRegisterAddress() {
         users.register(new User("foo", "passfoo", "foo@weavesocks.com", "foouser", "pass"));
-        given().auth().preemptive().basic("foouser", "pass").
+        given().
+            contentType(JSON).
+            body(new AddressesResource.AddAddressRequest("16", "huntington", "lexington", "01886", "us", "foouser")).
         when().
-            get("/login").
+            post("/addresses").
         then().
-            assertThat().
-            statusCode(200);
+            statusCode(200).
+            body("id", containsString("foouser"));
     }
 
     @Test
-    public void testRegister() {
+    public void testGetAddress() {
+        User u = new User("foo", "passfoo", "foo@weavesocks.com", "foouser", "pass");
+        Address.Id addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
+        users.register(u);
+
         given().
-            contentType(JSON).
-            body(new User("bar", "passbar", "bar@weavesocks.com", "baruser", "pass")).
+              pathParam("id", addrId.toString()).
         when().
-            post("/register").
+              get("/addresses/{id}").
         then().
-            statusCode(200).
-            body("id", is("baruser"));
+            statusCode(OK.getStatusCode()).
+            body("number", is("555"),
+                    "city", is("Westford"));
+    }
+
+    @Test
+    public void testDeleteAddress() {
+        User u = users.getOrCreate("foouser");
+        u.setUsername("foouser");
+        Address.Id addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
+        users.register(u);
+
+        given().
+            pathParam("id", addrId.toString()).
+        when().
+            delete("/addresses/{id}").
+        then().
+            statusCode(200);
     }
 }

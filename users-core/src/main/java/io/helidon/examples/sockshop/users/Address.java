@@ -6,72 +6,57 @@ import java.util.Objects;
 import javax.json.bind.adapter.JsonbAdapter;
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTypeAdapter;
+import javax.persistence.Embeddable;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * User address.
+ */
+@Data
+@NoArgsConstructor
+@Embeddable
 public class Address implements Serializable {
+    /**
+     * The address ID.
+     */
     private Id id;
+
+    /**
+     * The address number.
+     */
     private String number;
+
+    /**
+     * The street name.
+     */
     private String street;
+
+    /**
+     * The city name.
+     */
     private String city;
+
+    /**
+     * The post code.
+     */
     private String postcode;
+
+    /**
+     * The country name.
+     */
     private String country;
 
-    public Address() {
-    }
-
+    /**
+     * Construct {@code Address} with specified attributes.
+     */
     public Address(String number, String street, String city, String postcode, String country) {
         this.number = number;
         this.street = street;
         this.city = city;
         this.postcode = postcode;
         this.country = country;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Id getId() {
-        return id;
-    }
-
-    public void setId(Id id) {
-        this.id = id;
     }
 
     @JsonbProperty("_links")
@@ -81,14 +66,22 @@ public class Address implements Serializable {
                 : Links.address("");
     }
 
+    /**
+     * Address Id class.
+     */
     @JsonbTypeAdapter(Id.JsonAdapter.class)
     public static class Id implements Serializable {
+        /**
+         * The customer Id that the address associates to.
+         */
         private String customerId;
+
+        /**
+         * The id for the address.
+         */
         private String addressId;
 
-        public Id() {
-        }
-
+        @Builder
         public Id(String id) {
             String[] parts = id.split(":");
             if (parts.length != 2) {
@@ -98,25 +91,21 @@ public class Address implements Serializable {
             addressId = parts[1];
         }
 
+        /**
+         * Construct a {@code Address.Id} with the specified attributes.
+         */
         public Id(String customerId, int addressId) {
             this.customerId = customerId;
             this.addressId = Integer.toString(addressId);
         }
 
+        /**
+         * Return the customer id that the address is associated to.
+         *
+         * @return the customer id
+         */
         public String getCustomerId() {
             return customerId;
-        }
-
-        public void setCustomerId(String customerId) {
-            this.customerId = customerId;
-        }
-
-        public String getAddressId() {
-            return addressId;
-        }
-
-        public void setAddressId(String addressId) {
-            this.addressId = addressId;
         }
 
         @Override
