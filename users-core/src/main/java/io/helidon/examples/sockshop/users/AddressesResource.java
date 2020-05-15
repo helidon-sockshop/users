@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import static io.helidon.examples.sockshop.users.JsonHelpers.embed;
@@ -68,6 +69,7 @@ public class AddressesResource {
     }
 
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class AddAddressRequest {
         public String number;
         public String street;
@@ -75,14 +77,5 @@ public class AddressesResource {
         public String postcode;
         public String country;
         public String userID;
-
-        public AddAddressRequest(String number, String street, String city, String postcode, String country, String userID) {
-            this.number = number;
-            this.street = street;
-            this.city = city;
-            this.postcode = postcode;
-            this.country = country;
-            this.userID = userID;
-            }
     }
 }

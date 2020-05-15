@@ -82,7 +82,7 @@ public interface UserRepository {
      *
      * @return the {@code User} with the specified user identifier
      */
-            User getUser(String id);
+     User getUser(String id);
 
     /**
      * Remove the {@code User} with the specified user identifier;

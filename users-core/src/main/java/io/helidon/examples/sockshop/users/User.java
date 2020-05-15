@@ -51,7 +51,7 @@ public class User implements Serializable {
     private String password;
 
     /**
-     * A map of addresses that are associated to the user.
+     * A map of addresses that are associated with the user.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<Address.Id, Address> addresses = new LinkedHashMap<>();
@@ -74,7 +74,7 @@ public class User implements Serializable {
     }
 
     /**
-     * Construct {@code User} with specified attributes.
+     * Construct {@code User} with specified parameters.
      */
     protected User(String firstName, String lastName, String email, String username, String password,
                 Collection<Address> addresses, Collection<Card> cards) {
@@ -88,9 +88,9 @@ public class User implements Serializable {
     }
 
     /**
-     * Return all the addresses associated to the user.
+     * Return all the addresses that are associated with the user.
      *
-     * @return all the addresses associated to the user
+     * @return all the addresses that are associated with the user
      */
     @JsonbTransient
     public Collection<Address> getAddresses() {
@@ -116,12 +116,12 @@ public class User implements Serializable {
      * @return the added address
      */
     public Address addAddress(Address address) {
-            if (address.getId() == null) {
-                address.setId(new Address.Id(username, addresses.size() + 1));
-            }
-            addresses.put(address.getId(), address);
-            return address;
+        if (address.getId() == null) {
+            address.setId(new Address.Id(username, addresses.size() + 1));
         }
+        addresses.put(address.getId(), address);
+        return address;
+    }
 
     /**
      * Remove address for the specified address ID.
@@ -130,13 +130,13 @@ public class User implements Serializable {
      *
      * @return the user
      */
-        public User removeAddress(Address.Id id) {
-            addresses.remove(id);
-            return this;
-        }
+    public User removeAddress(Address.Id id) {
+        addresses.remove(id);
+        return this;
+    }
 
     /**
-     * Return all cards associated with the user.
+     * Return all cards that belong to the user.
      *
      * @return all cards for the user
      */
@@ -193,7 +193,7 @@ public class User implements Serializable {
      *
      * @param password the password
      *
-     * @return true if the specified password match the user password
+     * @return true if the specified password match the user's password
      */
     public Boolean authenticate(String password) {
         return password.equals(this.password);

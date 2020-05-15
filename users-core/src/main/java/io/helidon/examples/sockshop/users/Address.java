@@ -24,7 +24,7 @@ public class Address implements Serializable {
     private Id id;
 
     /**
-     * The address number.
+     * The street number.
      */
     private String number;
 
@@ -49,7 +49,7 @@ public class Address implements Serializable {
     private String country;
 
     /**
-     * Construct {@code Address} with specified attributes.
+     * Construct {@code Address} with specified parameters.
      */
     public Address(String number, String street, String city, String postcode, String country) {
         this.number = number;
@@ -72,7 +72,7 @@ public class Address implements Serializable {
     @JsonbTypeAdapter(Id.JsonAdapter.class)
     public static class Id implements Serializable {
         /**
-         * The customer Id that the address associates to.
+         * The customer Id that the address is associated with.
          */
         private String customerId;
 
@@ -92,7 +92,7 @@ public class Address implements Serializable {
         }
 
         /**
-         * Construct a {@code Address.Id} with the specified attributes.
+         * Construct a {@code Address.Id} with the specified parameters.
          */
         public Id(String customerId, int addressId) {
             this.customerId = customerId;
@@ -100,7 +100,7 @@ public class Address implements Serializable {
         }
 
         /**
-         * Return the customer id that the address is associated to.
+         * Return the customer id that the address is associated with.
          *
          * @return the customer id
          */

@@ -12,6 +12,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import static io.helidon.examples.sockshop.users.JsonHelpers.embed;
 import static io.helidon.examples.sockshop.users.JsonHelpers.obj;
@@ -66,21 +68,12 @@ public class CardsResource {
         return Response.ok(obj().add("status", fSuccess).build()).build();
     }
 
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class AddCardRequest {
         public String longNum;
         public String expires;
         public String ccv;
         public String userID;
-
-        public AddCardRequest()
-            {
-            }
-
-        public AddCardRequest(String longNum, String expires, String ccv, String userID) {
-            this.longNum = longNum;
-            this.expires = expires;
-            this.ccv = ccv;
-            this.userID = userID;
-        }
     }
 }

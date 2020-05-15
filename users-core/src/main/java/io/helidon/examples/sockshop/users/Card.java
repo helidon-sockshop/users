@@ -35,7 +35,9 @@ public class Card implements Serializable {
      */
     private String ccv;
 
-    @Builder
+    /**
+     * Construct {@code Card} with specified parameters.
+     */
     public Card(String longNum, String expires, String ccv) {
         this.longNum = longNum;
         this.expires = expires;
@@ -77,12 +79,12 @@ public class Card implements Serializable {
     @JsonbTypeAdapter(Id.JsonAdapter.class)
     public static class Id implements Serializable {
         /**
-         * The ID of the customer this card belongs to.
+         * The ID of the customer to whom the card belongs.
          */
         private String customerId;
 
         /**
-         * The first part of the card id.
+         * The card id.
          */
         private String cardId;
 
@@ -96,14 +98,16 @@ public class Card implements Serializable {
                 cardId = parts[1];
             }
 
-            @Builder
-            public Id(String customerId, String cardId) {
-                this.customerId = customerId;
-                this.cardId = cardId;
-            }
+        /**
+         * Construct {@code Card.Id} with specified attributes.
+         */
+        public Id(String customerId, String cardId) {
+            this.customerId = customerId;
+            this.cardId = cardId;
+        }
 
         /**
-         * Return the customer id.
+         * Return the id for the customer to whom the card belongs.
          *
          * @return the customer id
          */
