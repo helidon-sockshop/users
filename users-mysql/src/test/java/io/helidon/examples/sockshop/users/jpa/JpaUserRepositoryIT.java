@@ -28,6 +28,7 @@ public class JpaUserRepositoryIT extends UserRepositoryTest {
      * Stop the server, as we cannot have multiple servers started at the same time.
      */
     @AfterAll
+
     static void stopServer() {
         SERVER.stop();
     }

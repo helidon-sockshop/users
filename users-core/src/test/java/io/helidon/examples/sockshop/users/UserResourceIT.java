@@ -69,6 +69,7 @@ public class UserResourceIT {
 
     @Test
     public void testRegister() {
+        users.removeUser("baruser");
         given().
             contentType(JSON).
             body(new User("bar", "passbar", "bar@weavesocks.com", "baruser", "pass")).

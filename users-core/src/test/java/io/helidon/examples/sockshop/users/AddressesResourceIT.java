@@ -18,8 +18,7 @@ import static org.hamcrest.Matchers.is;
  * Integration tests for {@link AddressesResource}.
  */
 
-public class AddressesResourceIT
-    {
+public class AddressesResourceIT {
     private static Server SERVER;
     private UserRepository users;
 
@@ -72,7 +71,7 @@ public class AddressesResourceIT
     @Test
     public void testGetAddress() {
         User u = new User("foo", "passfoo", "foo@weavesocks.com", "foouser", "pass");
-        Address.Id addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
+        AddressId addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
         users.register(u);
 
         given().
@@ -89,7 +88,7 @@ public class AddressesResourceIT
     public void testDeleteAddress() {
         User u = users.getOrCreate("foouser");
         u.setUsername("foouser");
-        Address.Id addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
+        AddressId addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
         users.register(u);
 
         given().

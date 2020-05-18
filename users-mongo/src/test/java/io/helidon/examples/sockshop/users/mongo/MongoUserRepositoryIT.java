@@ -14,6 +14,6 @@ public class MongoUserRepositoryIT extends UserRepositoryTest {
         String host = System.getProperty("db.host","localhost");
         int    port = Integer.parseInt(System.getProperty("db.port","27017"));
 
-        return new MongoUserRepository(users(db(client())));
+        return new MongoUserRepository(users(db(client(host, port))));
     }
 }

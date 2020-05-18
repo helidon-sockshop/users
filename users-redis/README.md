@@ -1,7 +1,7 @@
 # orders-redis
 
 This module implements [Redis backend](./src/main/java/io/helidon/examples/sockshop/orders/redis/RedisUserRepository.java)
-for the [Users Service](../README.md) using Redisson client.
+for the [User Service](../README.md) using Redisson client.
 
 ## Building the Service
 

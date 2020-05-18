@@ -37,7 +37,7 @@ public class AddressesResource {
     @Produces(APPLICATION_JSON)
     public Response registerAddress(AddAddressRequest req) {
         Address address = new Address(req.number, req.street, req.city, req.postcode, req.country);
-        Address.Id id = users.addAddress(req.userID, address);
+        AddressId id = users.addAddress(req.userID, address);
 
         return Response.ok(obj().add("id", id.toString()).build()).build();
     }
@@ -45,14 +45,14 @@ public class AddressesResource {
     @GET
     @Path("{id}")
     @Produces(APPLICATION_JSON)
-    public Address getAddress(@PathParam("id") Address.Id id) {
+    public Address getAddress(@PathParam("id") AddressId id) {
         return users.getAddress(id);
     }
 
     @DELETE
     @Path("{id}")
     @Produces(APPLICATION_JSON)
-    public Response deleteAddress(@PathParam("id") Address.Id id) {
+    public Response deleteAddress(@PathParam("id") AddressId id) {
         try {
             users.removeAddress(id);
             return status(true);

@@ -19,62 +19,60 @@ public abstract class UserRepositoryTest {
 
     protected abstract UserRepository getUserRepository();
 
+    @BeforeEach
+    void setup() {
+        users.removeUser("testuser");
+    }
+
     @Test
     void testUserCreation() {
-        User u = users.getOrCreate("alex");
-        u.setUsername("alex");
-        u.setLastName("chace");
+        User u = users.getOrCreate("testuser");
+        u.setUsername("testuser");
+        u.setLastName("test");
         users.register(u);
 
-        assertThat(users.getUser("alex").getLastName(), is("chace"));
-        users.removeUser("alex");
+        assertThat(users.getUser("testuser").getLastName(), is("test"));
+        users.removeUser("testuser");
     }
 
     @Test
     void testAddAddress() {
-        User u1 = users.getOrCreate("alex");
-        u1.setUsername("alex");
-        Address.Id addrId = u1.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
-        users.register(u1);
-
+        User u = users.getOrCreate("testuser");
+        u.setUsername("testuser");
+        AddressId addrId = u.addAddress(new Address("555", "woodbury St", "Westford", "01886", "USA")).getId();
+        users.register(u);
         assertThat(users.getAddress(addrId).getCity(), is("Westford"));
-        users.removeUser("alex");
     }
 
     @Test
     void testAddCard() {
-        User u = users.getOrCreate("alex");
-        u.setUsername("alex");
-        Card.Id cardId = u.addCard(new Card("1234123412341234", "12/19", "123")).getId();
+        User u = users.getOrCreate("testuser");
+        u.setUsername("testuser");
+        CardId cardId = u.addCard(new Card("1234123412341234", "12/19", "123")).getId();
         users.register(u);
-
         assertThat(users.getCard(cardId).getLongNum(), is("1234123412341234"));
-        users.removeUser("alex");
     }
 
     @Test
     void testUserAuthentication() {
-        users.removeUser("alex");
-        User u1 = users.getOrCreate("alex");
-        u1.setUsername("alex");
+        users.removeUser("testuser");
+        User u1 = users.getOrCreate("testuser");
+        u1.setUsername("testuser");
         u1.setPassword("pass");
         users.register(u1);
 
-        assertThat(users.authenticate("alex", "wrong"), is(false));
-        assertThat(users.authenticate("alex", "pass"), is(true));
-
-        users.removeUser("alex");
+        assertThat(users.authenticate("testuser", "wrong"), is(false));
+        assertThat(users.authenticate("testuser", "pass"), is(true));
     }
 
     @Test
     void testUserDeletion() {
-        User u1 = users.getOrCreate("adela");
-        u1.setUsername("adela");
-        users.register(u1);
+        User u = users.getOrCreate("testuser");
+        u.setUsername("testuser");
+        users.register(u);
 
-        users.removeUser("adela");
-        assertThat(users.getUser("adela"), is(nullValue()));
-
+        users.removeUser("testuser");
+        assertThat(users.getUser("testuser"), is(nullValue()));
     }
 
     @Test

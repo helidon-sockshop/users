@@ -37,7 +37,7 @@ public class CardsResource {
     @Produces(APPLICATION_JSON)
     public Response registerCard(AddCardRequest req) {
         Card card = new Card(req.longNum, req.expires, req.ccv);
-        Card.Id id = users.addCard(req.userID, card);
+        CardId id = users.addCard(req.userID, card);
 
         return Response.ok(obj().add("id", id.toString()).build()).build();
     }
@@ -45,14 +45,14 @@ public class CardsResource {
     @GET
     @Path("{id}")
     @Produces(APPLICATION_JSON)
-    public Card getCard(@PathParam("id") Card.Id id) {
+    public Card getCard(@PathParam("id") CardId id) {
         return users.getCard(id).mask();
     }
 
     @DELETE
     @Path("{id}")
     @Produces(APPLICATION_JSON)
-    public Response deleteCard(@PathParam("id") Card.Id id) {
+    public Response deleteCard(@PathParam("id") CardId id) {
         try {
             users.removeCard(id);
             return status(true);

@@ -1,9 +1,10 @@
 package io.helidon.examples.sockshop.users;
 
 import java.io.Serializable;
+
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
@@ -11,56 +12,66 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * User information.
+ * User data model.
  */
 @Data
-@NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Schema(description = "User data representing a customer")
 public class User implements Serializable {
     /**
      * User identifier.
      */
     @Id
+    @Schema(description = "User identifier")
     private String username;
 
     /**
      * The first name.
      */
+    @Schema(description = "User first name")
     private String firstName;
 
     /**
      * The last name.
      */
+    @Schema(description = "User last name")
     private String lastName;
 
     /**
      * The email.
      */
+    @Schema(description = "User email")
     private String email;
 
     /**
      * The password.
      */
+    @Schema(description = "User password")
     private String password;
 
     /**
-     * A map of addresses that are associated with the user.
+     * The addresses that are associated with the user.
      */
+    @JsonbTransient
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Map<Address.Id, Address> addresses = new LinkedHashMap<>();
+    private List<Address> addresses = new ArrayList<>();
 
     /**
-     * A map of cards that belongs to the user.
+     * The cards that belongs to the user.
      */
+    @JsonbTransient
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Map<Card.Id, Card> cards = new LinkedHashMap<>();
+    private List<Card> cards = new ArrayList<>();
+
+    /**
+     * Default constructor.
+     */
+    public User() {
+    }
 
     /**
      * Construct {@code User} with specified attributes.
@@ -88,25 +99,20 @@ public class User implements Serializable {
     }
 
     /**
-     * Return all the addresses that are associated with the user.
-     *
-     * @return all the addresses that are associated with the user
-     */
-    @JsonbTransient
-    public Collection<Address> getAddresses() {
-        return addresses.values();
-    }
-
-    /**
      * Return the address for the specified address ID.
      *
-     * @param id the address ID
+     * @param id the address identifier
      *
      * @return the address for the specified address ID
      */
-    public Address getAddress(Address.Id id) {
-            return addresses.getOrDefault(id, new Address());
-        }
+    public Address getAddress(String id) {
+        return addresses.stream()
+            .filter(address -> address.getAddressId().equals(id))
+            .findFirst()
+            .orElse(new Address()
+                    .setAddressId(id)
+                    .setUser(this));
+    }
 
     /**
      * Add the specified address.
@@ -116,10 +122,11 @@ public class User implements Serializable {
      * @return the added address
      */
     public Address addAddress(Address address) {
-        if (address.getId() == null) {
-            address.setId(new Address.Id(username, addresses.size() + 1));
+        if (address.getAddressId() == null) {
+            address.setAddressId(Integer.toString(addresses.size() + 1));
         }
-        addresses.put(address.getId(), address);
+
+        addresses.add(address.setUser(this));
         return address;
     }
 
@@ -130,19 +137,9 @@ public class User implements Serializable {
      *
      * @return the user
      */
-    public User removeAddress(Address.Id id) {
-        addresses.remove(id);
+    public User removeAddress(String id) {
+        addresses.remove(getAddress(id));
         return this;
-    }
-
-    /**
-     * Return all cards that belong to the user.
-     *
-     * @return all cards for the user
-     */
-    @JsonbTransient
-    public Collection<Card> getCards() {
-        return cards.values();
     }
 
     /**
@@ -152,8 +149,13 @@ public class User implements Serializable {
      *
      * @return the card for the specified card ID
      */
-    public Card getCard(Card.Id id) {
-        return cards.getOrDefault(id, new Card());
+    public Card getCard(String id) {
+        return cards.stream()
+            .filter(card -> card.getCardId().equals(id))
+            .findFirst()
+            .orElse(new Card()
+                .setCardId(id)
+                .setUser(this));
     }
 
     /**
@@ -164,10 +166,10 @@ public class User implements Serializable {
      * @return the added card
      */
     public Card addCard(Card card) {
-        if (card.getId() == null) {
-            card.setId(new Card.Id(username, card.last4()));
+        if (card.getCardId() == null) {
+            card.setCardId(card.last4());
         }
-        cards.put(card.getId(), card);
+        cards.add(card.setUser(this));
         return card;
     }
 
@@ -176,10 +178,10 @@ public class User implements Serializable {
      *
      * @param id the card ID
      *
-     * @return the user
+     * @return this user
      */
-    public User removeCard(Card.Id id) {
-        cards.remove(id);
+    public User removeCard(String id) {
+        cards.remove(getCard(id));
         return this;
     }
 

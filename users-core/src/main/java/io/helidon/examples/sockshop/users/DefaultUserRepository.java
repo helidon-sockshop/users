@@ -37,33 +37,33 @@ public class DefaultUserRepository implements UserRepository {
         }
 
     @Override
-    public Address.Id addAddress(String userID, Address address) {
+    public AddressId addAddress(String userID, Address address) {
         return users.get(userID).addAddress(address).getId();
     }
 
     @Override
-    public Address getAddress(Address.Id id) {
-        return users.get(id.getCustomerId()).getAddress(id);
+    public Address getAddress(AddressId id) {
+        return users.get(id.getUser()).getAddress(id.getAddressId());
     }
 
     @Override
-    public void removeAddress(Address.Id id) {
-        users.get(id.getCustomerId()).removeAddress(id);
+    public void removeAddress(AddressId id) {
+        users.get(id.getUser()).removeAddress(id.getAddressId());
     }
 
     @Override
-    public Card.Id addCard(String userID, Card card) {
+    public CardId addCard(String userID, Card card) {
         return users.get(userID).addCard(card).getId();
     }
 
     @Override
-    public Card getCard(Card.Id id) {
-        return users.get(id.getCustomerId()).getCard(id);
+    public Card getCard(CardId id) {
+        return users.get(id.getUser()).getCard(id.getCardId());
     }
 
     @Override
-    public void removeCard(Card.Id id) {
-        users.get(id.getCustomerId()).removeCard(id);
+    public void removeCard(CardId id) {
+        users.get(id.getUser()).removeCard(id.getCardId());
     }
 
     @Override

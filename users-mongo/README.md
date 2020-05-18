@@ -1,7 +1,7 @@
 # orders-mongo
 
 This module implements [MongoDB backend](./src/main/java/io/helidon/examples/sockshop/users/mongo/MongoUserRepository.java)
-for the [Users Service](../README.md).
+for the [User Service](../README.md).
 
 ## Building the Service
 

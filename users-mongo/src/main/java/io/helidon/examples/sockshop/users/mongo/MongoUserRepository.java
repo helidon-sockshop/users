@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import com.mongodb.client.model.Indexes;
+import io.helidon.examples.sockshop.users.AddressId;
+import io.helidon.examples.sockshop.users.CardId;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -33,18 +37,23 @@ import static com.mongodb.client.model.Filters.eq;
 @Traced
 public class MongoUserRepository extends DefaultUserRepository {
 
-    private MongoCollection<MongoUser> users;
+    private MongoCollection<User> users;
 
     @Inject
-    MongoUserRepository(MongoCollection<MongoUser> users) {
+    MongoUserRepository(MongoCollection<User> users) {
         this.users = users;
     }
 
+    @PostConstruct
+    void configure() {
+    users.createIndex(Indexes.hashed("username"));
+    }
+
     @Override
-    public Address.Id addAddress(String userID, Address address) {
-        MongoUser user = findUser(userID);
+    public AddressId addAddress(String userID, Address address) {
+        User user = findUser(userID);
         if (user != null) {
-            Address.Id id = user.addAddress(address).getId();
+            AddressId id = user.addAddress(address).getId();
             updateUser(userID, user);
             return id;
         }
@@ -52,25 +61,25 @@ public class MongoUserRepository extends DefaultUserRepository {
     }
 
     @Override
-    public Address getAddress(Address.Id id) {
-        return findUser(id.getCustomerId()).getAddress(id);
+    public Address getAddress(AddressId id) {
+        return findUser(id.getUser()).getAddress(id.getAddressId());
     }
 
     @Override
-    public void removeAddress(Address.Id id) {
-        String    userID = id.getCustomerId();
-        MongoUser user   = findUser(userID);
+    public void removeAddress(AddressId id) {
+        String userID = id.getUser();
+        User user = findUser(userID);
         if (user != null) {
-            user.removeAddress(id);
+            user.removeAddress(id.getAddressId());
             updateUser(userID, user);
         }
     }
 
     @Override
-    public Card.Id addCard(String userID, Card card) {
-        MongoUser user = findUser(userID);
+    public CardId addCard(String userID, Card card) {
+        User user = findUser(userID);
         if (user != null) {
-            Card.Id id = user.addCard(card).getId();
+            CardId id = user.addCard(card).getId();
             updateUser(userID, user);
             return id;
         }
@@ -78,31 +87,31 @@ public class MongoUserRepository extends DefaultUserRepository {
     }
 
     @Override
-    public Card getCard(Card.Id id) {
-        return findUser(id.getCustomerId()).getCard(id);
+    public Card getCard(CardId id) {
+        return findUser(id.getUser()).getCard(id.getCardId());
     }
 
     @Override
-    public void removeCard(Card.Id id) {
-        String    userID = id.getCustomerId();
-        MongoUser user   = findUser(userID);
+    public void removeCard(CardId id) {
+        String userID = id.getUser();
+        User user = findUser(userID);
         if (user != null) {
-            user.removeCard(id);
+            user.removeCard(id.getCardId());
             updateUser(userID, user);
         }
     }
 
     @Override
     public Collection<? extends User> getAllUsers() {
-        List<MongoUser> results = new ArrayList<>();
-        users.find().forEach((Consumer<? super MongoUser>) results::add);
+        List<User> results = new ArrayList<>();
+        users.find().forEach((Consumer<? super User>) results::add);
         return results;
     }
 
     @Override
     public User getOrCreate(String id) {
         return Optional.ofNullable(findUser(id))
-                .orElse(new MongoUser());
+                .orElse(new User());
     }
 
     @Override
@@ -112,7 +121,7 @@ public class MongoUserRepository extends DefaultUserRepository {
 
     @Override
     public User removeUser(String id) {
-        MongoUser user = findUser(id);
+        User user = findUser(id);
         if (user != null) {
             users.deleteOne(eq("username", id));
         }
@@ -129,18 +138,18 @@ public class MongoUserRepository extends DefaultUserRepository {
     public User register(User user) {
         User existing = findUser(user.getUsername());
         if (existing == null) {
-            users.insertOne(new MongoUser(user));
+            users.insertOne(user);
         }
         return existing;
     }
 
     // --- helpers ----------------------------------------------------------
 
-    private MongoUser findUser(String userID) {
+    private User findUser(String userID) {
         return users.find(eq("username", userID)).first();
     }
 
-    private void updateUser(String userID, MongoUser user) {
+    private void updateUser(String userID, User user) {
         users.replaceOne(eq("username", userID), user);
     }
 }

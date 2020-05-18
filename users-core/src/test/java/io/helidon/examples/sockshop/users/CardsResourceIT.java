@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.is;
 /**
  * Integration tests for {@link CardsResource}.
  */
-
 public class CardsResourceIT
     {
     private static Server SERVER;
@@ -73,7 +72,7 @@ public class CardsResourceIT
     public void testGetCard() {
         User u = users.getOrCreate("cardUser");
         u.setUsername("cardUser");
-        Card.Id cardId = u.addCard(new Card("3691369136913691", "01/21", "789")).getId();
+        CardId cardId = u.addCard(new Card("3691369136913691", "01/21", "789")).getId();
         users.register(u);
         given().
             pathParam("id", cardId.toString()).
@@ -89,7 +88,7 @@ public class CardsResourceIT
     public void testDeleteCard() {
         User u = users.getOrCreate("cardUser");
         u.setUsername("cardUser");
-        Card.Id cardId = u.addCard(new Card("3691369136913691", "01/21", "789")).getId();
+        CardId cardId = u.addCard(new Card("3691369136913691", "01/21", "789")).getId();
         users.register(u);
         given().
             pathParam("id", cardId.toString()).

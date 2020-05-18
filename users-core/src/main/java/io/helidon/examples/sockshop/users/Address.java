@@ -1,52 +1,79 @@
 package io.helidon.examples.sockshop.users;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-import javax.json.bind.adapter.JsonbAdapter;
-import javax.json.bind.annotation.JsonbProperty;
-import javax.json.bind.annotation.JsonbTypeAdapter;
-import javax.persistence.Embeddable;
-import lombok.Builder;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 /**
- * User address.
+ * Representation of an address.
  */
 @Data
 @NoArgsConstructor
-@Embeddable
+@Entity
+@IdClass(AddressId.class)
+@Schema(description = "User address")
 public class Address implements Serializable {
     /**
-     * The address ID.
+     * The address identifier.
      */
-    private Id id;
+    @Id
+    @Schema(description = "The address identifier")
+    private String addressId;
 
     /**
      * The street number.
      */
+    @Schema(description = "The street number")
     private String number;
 
     /**
      * The street name.
      */
+    @Schema(description = "The street name")
     private String street;
 
     /**
      * The city name.
      */
+    @Schema(description = "The city name")
     private String city;
 
     /**
-     * The post code.
+     * The postal code.
      */
+    @Schema(description = "The postal code")
     private String postcode;
 
     /**
      * The country name.
      */
+    @Schema(description = "The country name")
     private String country;
+
+    /**
+     * The Address.Id.
+     */
+    private AddressId id;
+
+    /**
+     * The user this address is associated with, purely for JPA optimization.
+     */
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonbTransient
+    private User user;
 
     /**
      * Construct {@code Address} with specified parameters.
@@ -59,88 +86,42 @@ public class Address implements Serializable {
         this.country = country;
     }
 
-    @JsonbProperty("_links")
-    public Links getLinks() {
-        return id != null
-                ? Links.address(id.toString())
-                : Links.address("");
+    /**
+     * Return the user this address is associated with.
+     *
+     * @return the user this address is associated with
+     */
+    User getUser() {
+    return user;
     }
 
     /**
-     * Address Id class.
+     * Set the uer this address belongs to.
+     *
+     * @param user the user to set
+     *
+     * @return this user
      */
-    @JsonbTypeAdapter(Id.JsonAdapter.class)
-    public static class Id implements Serializable {
-        /**
-         * The customer Id that the address is associated with.
-         */
-        private String customerId;
+    Address setUser(User user) {
+        this.user = user;
+        return this;
+    }
 
-        /**
-         * The id for the address.
-         */
-        private String addressId;
+    /**
+     * Set the address id.
+     */
+    Address setAddressId(String id) {
+        this.addressId = id;
+        return this;
+    }
 
-        @Builder
-        public Id(String id) {
-            String[] parts = id.split(":");
-            if (parts.length != 2) {
-                throw new IllegalArgumentException("Address Id is in the wrong format");
-            }
-            customerId = parts[0];
-            addressId = parts[1];
+    /**
+     * Return Address.Id for this address.
+     */
+    public AddressId getId() {
+        if (id == null) {
+            id = new AddressId(user.getUsername(), addressId);
         }
-
-        /**
-         * Construct a {@code Address.Id} with the specified parameters.
-         */
-        public Id(String customerId, int addressId) {
-            this.customerId = customerId;
-            this.addressId = Integer.toString(addressId);
-        }
-
-        /**
-         * Return the customer id that the address is associated with.
-         *
-         * @return the customer id
-         */
-        public String getCustomerId() {
-            return customerId;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Id id = (Id) o;
-            return customerId.equals(id.customerId) &&
-                    addressId.equals(id.addressId);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(customerId, addressId);
-        }
-
-        @Override
-        public String toString() {
-            return customerId + ":" + addressId;
-        }
-
-        public static class JsonAdapter implements JsonbAdapter<Id, String> {
-            @Override
-            public String adaptToJson(Id id) throws Exception {
-                return id.toString();
-            }
-
-            @Override
-            public Id adaptFromJson(String id) throws Exception {
-                return new Id(id);
-            }
-        }
+        return id;
     }
 }

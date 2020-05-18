@@ -1,7 +1,7 @@
-# catalog-mysql
+# users-mysql
 
 This module implements [JPA backend](./src/main/java/io/helidon/examples/sockshop/users/jpa/JpaCartRepository.java)
-for the [Product Catalog Service](../README.md), using MySQL as a backend database.
+for the [Product User Service](../README.md), using MySQL as a backend database.
 
 ## Building the Service
 

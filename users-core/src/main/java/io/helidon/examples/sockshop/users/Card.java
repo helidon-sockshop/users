@@ -1,39 +1,68 @@
 package io.helidon.examples.sockshop.users;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-import javax.json.bind.adapter.JsonbAdapter;
 import javax.json.bind.annotation.JsonbProperty;
-import javax.json.bind.annotation.JsonbTypeAdapter;
-import javax.persistence.Embeddable;
-import lombok.Builder;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
+/**
+ * Representation of a credit card.
+ */
 @Data
 @NoArgsConstructor
-@Embeddable
+@Entity
+@IdClass(CardId.class)
+@Schema(description = "User credit card")
 public class Card implements Serializable {
     /**
-     * The card id.
+     * The card identifier.
      */
-    private Id id;
+    @Id
+    @Schema(description = "The card identifier")
+    private String cardId;
 
     /**
      * The card number.
      */
+    @Schema(description = "The card number")
     private String longNum;
 
     /**
      * The expiration date.
      */
+    @Schema(description = "The card expiration date")
     private String expires;
 
     /**
      * The security code.
      */
+    @Schema(description = "The card security code")
     private String ccv;
+
+    /**
+     * The composite id.
+     */
+    private CardId id;
+
+    /**
+     * The user this card belongs to, purely for JPA optimization.
+     */
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonbTransient
+    private User user;
 
     /**
      * Construct {@code Card} with specified parameters.
@@ -45,7 +74,46 @@ public class Card implements Serializable {
     }
 
     /**
-     * Return the card with masked card number.
+     * Return the user this address belongs to.
+     *
+     * @return the user this address belongs to
+     */
+    User getUser() {
+    return user;
+    }
+
+    /**
+     * Set the uer this address belongs to.
+     *
+     * @param user the user to set
+     *
+     * @return this card
+     */
+    Card setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    /**
+     * Set the card id.
+     */
+    Card setCardId(String id) {
+        this.cardId = id;
+        return this;
+    }
+
+    /**
+     * Return card CardId for this card.
+     */
+    public CardId getId() {
+        if (id == null) {
+            id = new CardId(user.getUsername(), cardId);
+        }
+        return id;
+    }
+
+/**
+ * Return the card with masked card number.
      *
      * @return the card with masked card number
      */
@@ -69,85 +137,7 @@ public class Card implements Serializable {
     @JsonbProperty("_links")
     public Links getLinks() {
         return id != null
-                ? Links.card(id.toString())
-                : Links.card("");
-    }
-
-    /**
-     * Card Id class.
-     */
-    @JsonbTypeAdapter(Id.JsonAdapter.class)
-    public static class Id implements Serializable {
-        /**
-         * The ID of the customer to whom the card belongs.
-         */
-        private String customerId;
-
-        /**
-         * The card id.
-         */
-        private String cardId;
-
-        @Builder
-        public Id(String id) {
-                String[] parts = id.split(":");
-                if (parts.length != 2) {
-                    throw new IllegalArgumentException("Card Id is in the wrong format");
-                }
-                customerId = parts[0];
-                cardId = parts[1];
-            }
-
-        /**
-         * Construct {@code Card.Id} with specified attributes.
-         */
-        public Id(String customerId, String cardId) {
-            this.customerId = customerId;
-            this.cardId = cardId;
-        }
-
-        /**
-         * Return the id for the customer to whom the card belongs.
-         *
-         * @return the customer id
-         */
-        public String getCustomerId() {
-            return customerId;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Id id = (Id) o;
-            return customerId.equals(id.customerId) &&
-                    cardId.equals(id.cardId);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(customerId, cardId);
-        }
-
-        @Override
-        public String toString() {
-            return customerId + ":" + cardId;
-        }
-
-        public static class JsonAdapter implements JsonbAdapter<Id, String> {
-            @Override
-            public String adaptToJson(Id id) throws Exception {
-                return id.toString();
-            }
-
-            @Override
-            public Id adaptFromJson(String id) throws Exception {
-                return new Id(id);
-            }
-        }
+            ? Links.card(id.toString())
+            : Links.card("");
     }
 }

@@ -8,56 +8,56 @@ import java.util.Collection;
  */
 public interface UserRepository {
     /**
-     * Add an {@code Address} to the specified user identifier.
+     * Add an {@code Address} to the specified user.
      *
-     * @param userID  the user id associated to the address
+     * @param userID  the user id
      * @param address the address to add
      *
-     * @return the {@code Address.Id} of the address
+     * @return the {@code AddressId} of the address
      */
-    Address.Id addAddress(String userID, Address address);
+    AddressId addAddress(String userID, Address address);
 
     /**
-     * Return the {@code Address} for the specified identifier.
+     * Return the {@code Address} for the specified address identifier.
      *
      * @param id the address id
      *
      * @return the {@code Address} with the specified identifier
      */
-        Address getAddress(Address.Id id);
+        Address getAddress(AddressId id);
 
     /**
      * Remove the address with the specified identifier.
      *
      * @param id the address id
      */
-    void removeAddress(Address.Id id);
+    void removeAddress(AddressId id);
 
     /**
-     * Add a {@code Card} to the specified user identifier.
+     * Add a {@code Card} to the specified user.
      *
      * @param userID the user id
      * @param card   the card to add
      *
-     * @return the {@code Card.Id} of the card
+     * @return the {@code CardId} of the card
      */
-    Card.Id addCard(String userID, Card card);
+    CardId addCard(String userID, Card card);
 
     /**
-     * Return the {@code Card} with the specified identifier.
+     * Return the {@code Card} with the specified card identifier.
      *
      * @param id the card id
      *
-     * @return the {@code Card} with the specified identifier
+     * @return the {@code Card} with the specified card id
      */
-    Card getCard(Card.Id id);
+    Card getCard(CardId id);
 
     /**
      * Remove the card  with the specified identifier.
      *
      * @param id the card id
      */
-    void removeCard(Card.Id id);
+    void removeCard(CardId id);
 
     /**
      * Return all users.
@@ -67,27 +67,28 @@ public interface UserRepository {
     Collection<? extends User> getAllUsers();
 
     /**
-     * Return an existing {@code User} for the identifier; or a newly created {@code User}.
+     * Return an existing {@code User} for the specified user identifier;
+     * or a newly created {@code User}.
      *
-     * @param id the user identifier
+     * @param id the user id
      *
-     * @return the {@code User} with the specified user identifier
+     * @return the {@code User} with the specified user id
      */
     User getOrCreate(String id);
 
     /**
      * Return the {@code User} with the specified user identifier.
      *
-     * @param id the user identifier
+     * @param id the user id
      *
-     * @return the {@code User} with the specified user identifier
+     * @return the {@code User} with the specified user id
      */
      User getUser(String id);
 
     /**
      * Remove the {@code User} with the specified user identifier;
      *
-     * @param id the identifier
+     * @param id the id
      *
      * @return the removed {@code User}; can be {@code null}
      */
@@ -97,11 +98,19 @@ public interface UserRepository {
      * Authenticate a {@code User} with the specified username against
      * the specified password.
      *
-     * @param username the username to be authenticated
+     * @param username the username of the user to be authenticated
      * @param password the password to authenticate against
      *
      * @return true if password match
      */
     boolean authenticate(String username, String password);
-        User register(User user);
+
+    /**
+     * Register the specified user.
+     *
+     * @param user the user to be registered
+     *
+     * @return the registered user
+     */
+    User register(User user);
 }
