@@ -24,7 +24,8 @@ import static javax.interceptor.Interceptor.Priority.APPLICATION;
 @Traced
 @Priority(APPLICATION - 10)
 public class DefaultUserRepository implements UserRepository {
-    private final Map<String, User> users;
+
+    protected final Map<String, User> users;
 
     /**
      * Construct {@code DefaultUserRepository} with empty storage map.
