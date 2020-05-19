@@ -50,11 +50,6 @@ public class Card implements Serializable {
     private String ccv;
 
     /**
-     * The composite id.
-     */
-    private CardId id;
-
-    /**
      * The user this card belongs to, purely for JPA optimization.
      */
     @Id
@@ -103,17 +98,14 @@ public class Card implements Serializable {
     }
 
     /**
-     * Return card CardId for this card.
+     * Return CardId for this card.
      */
     public CardId getId() {
-        if (id == null) {
-            id = new CardId(user.getUsername(), cardId);
-        }
-        return id;
+        return new CardId(user.getUsername(), cardId);
     }
 
-/**
- * Return the card with masked card number.
+    /**
+     * Return the card with masked card number.
      *
      * @return the card with masked card number
      */
@@ -136,6 +128,7 @@ public class Card implements Serializable {
 
     @JsonbProperty("_links")
     public Links getLinks() {
+        CardId id = getId();
         return id != null
             ? Links.card(id.toString())
             : Links.card("");

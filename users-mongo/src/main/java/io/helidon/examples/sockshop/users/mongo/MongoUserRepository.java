@@ -3,24 +3,21 @@ package io.helidon.examples.sockshop.users.mongo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.mongodb.client.model.Indexes;
 import io.helidon.examples.sockshop.users.AddressId;
 import io.helidon.examples.sockshop.users.CardId;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
 import io.helidon.examples.sockshop.users.Address;
 import io.helidon.examples.sockshop.users.Card;
-import io.helidon.examples.sockshop.users.DefaultUserRepository;
 import io.helidon.examples.sockshop.users.User;
 import io.helidon.examples.sockshop.users.UserRepository;
 
@@ -28,14 +25,17 @@ import com.mongodb.client.MongoCollection;
 import org.eclipse.microprofile.opentracing.Traced;
 
 import static com.mongodb.client.model.Filters.eq;
+import static javax.interceptor.Interceptor.Priority.APPLICATION;
 
 /**
- *
+ * An implementation of {@link io.helidon.examples.sockshop.users.UserRepository}
+ * that that uses MongoDB as a backend data store.
  */
 @ApplicationScoped
-@Specializes
+@Alternative
+@Priority(APPLICATION)
 @Traced
-public class MongoUserRepository extends DefaultUserRepository {
+public class MongoUserRepository implements UserRepository {
 
     private MongoCollection<User> users;
 
@@ -111,7 +111,7 @@ public class MongoUserRepository extends DefaultUserRepository {
     @Override
     public User getOrCreate(String id) {
         return Optional.ofNullable(findUser(id))
-                .orElse(new User());
+                .orElse(new User(id));
     }
 
     @Override

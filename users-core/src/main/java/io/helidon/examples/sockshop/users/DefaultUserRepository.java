@@ -5,9 +5,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.opentracing.Traced;
+
+import static javax.interceptor.Interceptor.Priority.APPLICATION;
 
 /**
  * Simple in-memory implementation of {@link io.helidon.examples.sockshop.users.UserRepository}
@@ -19,8 +22,9 @@ import org.eclipse.microprofile.opentracing.Traced;
  */
 @ApplicationScoped
 @Traced
+@Priority(APPLICATION - 10)
 public class DefaultUserRepository implements UserRepository {
-    private Map<String, User> users;
+    private final Map<String, User> users;
 
     /**
      * Construct {@code DefaultUserRepository} with empty storage map.
@@ -38,32 +42,42 @@ public class DefaultUserRepository implements UserRepository {
 
     @Override
     public AddressId addAddress(String userID, Address address) {
-        return users.get(userID).addAddress(address).getId();
+        User user = getOrCreate(userID);
+        AddressId id = user.addAddress(address).getId();
+        saveUser(user);
+        return id;
     }
 
     @Override
     public Address getAddress(AddressId id) {
-        return users.get(id.getUser()).getAddress(id.getAddressId());
+        return getOrCreate(id.getUser()).getAddress(id.getAddressId());
     }
 
     @Override
     public void removeAddress(AddressId id) {
-        users.get(id.getUser()).removeAddress(id.getAddressId());
+        User user = getOrCreate(id.getUser());
+        user.removeAddress(id.getAddressId());
+        saveUser(user);
     }
 
     @Override
     public CardId addCard(String userID, Card card) {
-        return users.get(userID).addCard(card).getId();
+        User user = getOrCreate(userID);
+        CardId id = user.addCard(card).getId();
+        saveUser(user);
+        return id;
     }
 
     @Override
     public Card getCard(CardId id) {
-        return users.get(id.getUser()).getCard(id.getCardId());
+        return getOrCreate(id.getUser()).getCard(id.getCardId());
     }
 
     @Override
     public void removeCard(CardId id) {
-        users.get(id.getUser()).removeCard(id.getCardId());
+        User user = getOrCreate(id.getUser());
+        user.removeCard(id.getCardId());
+        saveUser(user);
     }
 
     @Override
@@ -73,7 +87,7 @@ public class DefaultUserRepository implements UserRepository {
 
     @Override
     public User getOrCreate(String id) {
-        return users.getOrDefault(id, new User());
+        return users.getOrDefault(id, new User(id));
     }
 
     @Override
@@ -95,6 +109,12 @@ public class DefaultUserRepository implements UserRepository {
     @Override
     public User register(User user) {
         return users.putIfAbsent(user.getUsername(), user);
+    }
+
+    // ---- helpers ---------------------------------------------------------
+
+    private void saveUser(User user) {
+        users.put(user.getUsername(), user);
     }
 
     @PostConstruct

@@ -74,6 +74,13 @@ public class User implements Serializable {
     }
 
     /**
+     * Construct {@code User} with ID only.
+     */
+    public User(String username) {
+        this.username = username;
+    }
+
+    /**
      * Construct {@code User} with specified attributes.
      */
     public User(String firstName, String lastName, String email, String username, String password) {
@@ -131,6 +138,15 @@ public class User implements Serializable {
     }
 
     /**
+     * Set the addresses.
+     *
+     * @param addresses the list of addresses
+     */
+    public void setAddresses(List<Address> addresses) {
+        addresses.forEach(this::addAddress);
+    }
+
+    /**
      * Remove address for the specified address ID.
      *
      * @param id the address ID
@@ -173,6 +189,15 @@ public class User implements Serializable {
         return card;
     }
 
+    /**
+     * Set the cards.
+     *
+     * @param cards the list of cards
+     */
+    public void setCards(List<Card> cards) {
+        cards.forEach(this::addCard);
+    }
+    
     /**
      * Remove the card with the specified card ID.
      *

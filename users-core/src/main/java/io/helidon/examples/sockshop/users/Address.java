@@ -61,11 +61,6 @@ public class Address implements Serializable {
     private String country;
 
     /**
-     * The Address.Id.
-     */
-    private AddressId id;
-
-    /**
      * The user this address is associated with, purely for JPA optimization.
      */
     @Id
@@ -119,9 +114,6 @@ public class Address implements Serializable {
      * Return Address.Id for this address.
      */
     public AddressId getId() {
-        if (id == null) {
-            id = new AddressId(user.getUsername(), addressId);
-        }
-        return id;
+        return new AddressId(user.getUsername(), addressId);
     }
 }

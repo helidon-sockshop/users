@@ -96,8 +96,7 @@ public class JpaUserRepository implements UserRepository
     public User getOrCreate(String userId) {
         User u = em.find(User.class, userId);
         if (u == null) {
-            u = new User();
-            u.setUsername(userId);
+            u = new User(userId);
         }
         return u;
     }
