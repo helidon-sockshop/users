@@ -11,6 +11,7 @@
 
     <modules>
         <module>users-core</module>
+        <module>users-coherence</module>
         <module>users-mongo</module>
         <module>users-mysql</module>
         <module>users-redis</module>

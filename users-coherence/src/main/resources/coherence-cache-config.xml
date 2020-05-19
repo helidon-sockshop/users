@@ -14,7 +14,7 @@
     <caching-schemes>
         <distributed-scheme>
             <scheme-name>users</scheme-name>
-            <service-name>users</service-name>
+            <service-name>Users</service-name>
             <backing-map-scheme>
                 <local-scheme>
                     <unit-calculator>BINARY</unit-calculator>

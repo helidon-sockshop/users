@@ -23,12 +23,12 @@ To run Coherence implementation of the service, simply execute
 $ docker run -p 7001:7001 helidon/sockshop/users-coherence
 ``` 
 
-As a basic test, you should be able to perform an HTTP GET against `/cards` endpoint:
+As a basic test, you should be able to perform an HTTP GET against `/customers` endpoint:
 
 ```bash
-$ curl http://localhost:7001/cards
+$ curl http://localhost:7001/customers
 ``` 
-which should return 200 response code.
+which should return 200 response code and a list of customers.
 
 ## License
 

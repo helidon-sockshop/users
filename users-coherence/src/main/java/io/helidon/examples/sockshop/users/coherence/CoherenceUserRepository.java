@@ -56,7 +56,7 @@ public class CoherenceUserRepository extends DefaultUserRepository {
     @Override
     public AddressId addAddress(String userID, Address address) {
         return users.invoke(userID, entry -> {
-            User u = entry.getValue();
+            User u = entry.getValue(new User(entry.getKey()));
             Address addr = u.addAddress(address);
             entry.setValue(u);
             return addr.getId();
@@ -67,7 +67,7 @@ public class CoherenceUserRepository extends DefaultUserRepository {
     public void removeAddress(AddressId id) {
         String userID = id.getUser();
         users.invoke(userID, entry -> {
-            User u = entry.getValue();
+            User u = entry.getValue(new User(entry.getKey()));
             entry.setValue(u.removeAddress(id.getAddressId()));
             return null;
         });
@@ -76,7 +76,7 @@ public class CoherenceUserRepository extends DefaultUserRepository {
     @Override
     public CardId addCard(String userID, Card card) {
         return users.invoke(userID, entry -> {
-            User u = entry.getValue();
+            User u = entry.getValue(new User(entry.getKey()));
             Card c = u.addCard(card);
             entry.setValue(u);
             return c.getId();
@@ -87,9 +87,17 @@ public class CoherenceUserRepository extends DefaultUserRepository {
     public void removeCard(CardId id) {
         String userId = id.getUser();
         users.invoke(userId, entry -> {
-            User u = entry.getValue();
+            User u = entry.getValue(new User(entry.getKey()));
             entry.setValue(u.removeCard(id.getCardId()));
             return null;
+        });
+    }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        return users.invoke(username, entry -> {
+            User u = entry.getValue(new User(entry.getKey()));
+            return u.authenticate(password);
         });
     }
 }
