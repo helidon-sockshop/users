@@ -24,7 +24,7 @@ public class CardId implements Serializable {
     private String cardId;
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public CardId() {}
 

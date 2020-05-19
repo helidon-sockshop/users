@@ -34,6 +34,11 @@ public class AddressId implements Serializable {
     }
 
     /**
+     * Default constructor.
+     */
+    public AddressId() {}
+
+    /**
      * Construct an instance of {@code AddressId} with the specified parameters.
      */
     public AddressId(String user, String addressId) {
