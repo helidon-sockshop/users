@@ -7,6 +7,7 @@ import io.helidon.examples.sockshop.users.AddressId;
 import io.helidon.examples.sockshop.users.Card;
 import io.helidon.examples.sockshop.users.CardId;
 import io.helidon.examples.sockshop.users.UserRepository;
+
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
@@ -34,9 +35,12 @@ public class JpaUserRepository implements UserRepository
     @PersistenceContext
     private EntityManager em;
 
+    private volatile boolean fLoaded = false;
+
     @Override
     @Transactional
     public Address getAddress(AddressId id) {
+        ensureDataLoaded();
         return em.find(User.class, id.getUser()).getAddress(id.getAddressId());
     }
 
@@ -63,6 +67,7 @@ public class JpaUserRepository implements UserRepository
     @Override
     @Transactional
     public CardId addCard(String userID, Card card) {
+        ensureDataLoaded();
         User u = em.find(User.class, userID);
         CardId id = u.addCard(card).getId();
 
@@ -74,12 +79,14 @@ public class JpaUserRepository implements UserRepository
     @Override
     @Transactional
     public Card getCard(CardId id) {
+        ensureDataLoaded();
         return em.find(User.class, id.getUser()).getCard(id.getCardId());
     }
 
     @Override
     @Transactional
     public void removeCard(CardId id) {
+        ensureDataLoaded();
         User u = em.find(User.class, id.getUser());
         u.removeCard(id.getCardId());
         em.persist(u);
@@ -88,6 +95,7 @@ public class JpaUserRepository implements UserRepository
     @Override
     @Transactional
     public User getUser(String userId) {
+        ensureDataLoaded();
         return em.find(User.class, userId);
     }
 
@@ -105,6 +113,7 @@ public class JpaUserRepository implements UserRepository
     @Override
     @Transactional
     public User removeUser(String userId) {
+        ensureDataLoaded();
         User u = em.find(User.class, userId);
         if (u != null) {
             em.remove(u);
@@ -135,11 +144,34 @@ public class JpaUserRepository implements UserRepository
     @Override
     @Transactional
     public Collection<? extends User> getAllUsers() {
-
+        ensureDataLoaded();
         StringBuilder jql = new StringBuilder("select u from User as u");
 
         TypedQuery query = em.createQuery(jql.toString(), User.class);
 
         return query.getResultList();
+    }
+
+    /**
+     * Load a few users for CustomerResouce tests.
+     */
+    private void ensureDataLoaded() {
+        if (!fLoaded) {
+            User user = new User("Test", "User", "user@weavesocks.com", "user", "pass");
+            user.addCard(new Card("1234123412341234", "12/19", "123"));
+            user.addAddress(new Address("123", "Main St", "Springfield", "12123", "USA"));
+            register(user);
+
+            User aleks = new User("Aleks", "Seovic", "aleks@weavesocks.com", "aleks", "pass");
+            aleks.addCard(new Card("4567456745674567", "10/20", "007"));
+            aleks.addAddress(new Address("555", "Spruce St", "Tampa", "33633", "USA"));
+            register(aleks);
+
+            User bin = new User("Bin", "Chen", "bin@weavesocks.com", "bin", "pass");
+            bin.addCard(new Card("3691369136913691", "01/21", "789"));
+            bin.addAddress(new Address("123", "Boston St", "Boston", "01555", "USA"));
+            register(bin);
+            fLoaded = true;
+        }
     }
 }

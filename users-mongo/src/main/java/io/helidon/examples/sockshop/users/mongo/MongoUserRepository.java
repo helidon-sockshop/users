@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.users.Address;
 import io.helidon.examples.sockshop.users.Card;
 import io.helidon.examples.sockshop.users.User;
-import io.helidon.examples.sockshop.users.UserRepository;
+import io.helidon.examples.sockshop.users.DefaultUserRepository;
 
 import com.mongodb.client.MongoCollection;
 import org.eclipse.microprofile.opentracing.Traced;
@@ -35,7 +35,7 @@ import static javax.interceptor.Interceptor.Priority.APPLICATION;
 @Alternative
 @Priority(APPLICATION)
 @Traced
-public class MongoUserRepository implements UserRepository {
+public class MongoUserRepository extends DefaultUserRepository {
 
     private MongoCollection<User> users;
 
@@ -46,7 +46,8 @@ public class MongoUserRepository implements UserRepository {
 
     @PostConstruct
     void configure() {
-    users.createIndex(Indexes.hashed("username"));
+        createTestUsers();
+        users.createIndex(Indexes.hashed("username"));
     }
 
     @Override

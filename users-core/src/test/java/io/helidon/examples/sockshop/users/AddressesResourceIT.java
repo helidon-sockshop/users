@@ -38,7 +38,7 @@ public class AddressesResourceIT {
      */
     @AfterAll
     static void stopServer() {
-    SERVER.stop();
+        SERVER.stop();
     }
 
     @BeforeEach

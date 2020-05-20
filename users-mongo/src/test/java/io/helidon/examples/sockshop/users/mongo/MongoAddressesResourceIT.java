@@ -6,6 +6,5 @@ import io.helidon.examples.sockshop.users.AddressesResourceIT;
  * Integration tests for {@link io.helidon.examples.sockshop.users.AddressesResource},
  * using MongoDB for persistence.
  */
-public class MongoAddressesResourceIT
-        extends AddressesResourceIT {
+public class MongoAddressesResourceIT extends AddressesResourceIT {
 }
