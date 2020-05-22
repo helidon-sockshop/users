@@ -9,24 +9,18 @@ import java.util.regex.Pattern;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import io.helidon.security.providers.httpauth.HttpBasicAuthProvider;
 
 import static io.helidon.examples.sockshop.users.JsonHelpers.obj;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CONFLICT;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 @ApplicationScoped
 @Path("/")
-public class UserResource {
+public class UserResource implements UserApi {
     static final String HEADER_AUTHENTICATION_REQUIRED = "WWW-Authenticate";
     static final String HEADER_AUTHENTICATION = "Authorization";
     static final String BASIC_PREFIX = "Basic ";
@@ -37,10 +31,8 @@ public class UserResource {
     @Inject
     private UserRepository users;
 
-    @GET
-    @Path("login")
-    @Produces(APPLICATION_JSON)
-    public Response login(@HeaderParam("Authorization") String auth) {
+    @Override
+    public Response login(String auth) {
         if (!auth.startsWith(BASIC_PREFIX)) {
             return fail("Basic authentication header is missing");
         }
@@ -69,10 +61,7 @@ public class UserResource {
         }
     }
 
-    @POST
-    @Path("register")
-    @Consumes(APPLICATION_JSON)
-    @Produces(APPLICATION_JSON)
+    @Override
     public Response register(User user) {
         User prev = users.register(user);
         if (prev != null) {

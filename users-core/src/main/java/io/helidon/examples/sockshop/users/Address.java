@@ -27,37 +27,37 @@ public class Address implements Serializable {
      * The address identifier.
      */
     @Id
-    @Schema(description = "The address identifier")
+    @Schema(description = "Address identifier")
     private String addressId;
 
     /**
      * The street number.
      */
-    @Schema(description = "The street number")
+    @Schema(description = "Street number")
     private String number;
 
     /**
      * The street name.
      */
-    @Schema(description = "The street name")
+    @Schema(description = "Street name")
     private String street;
 
     /**
      * The city name.
      */
-    @Schema(description = "The city name")
+    @Schema(description = "City name")
     private String city;
 
     /**
      * The postal code.
      */
-    @Schema(description = "The postal code")
+    @Schema(description = "Postal code")
     private String postcode;
 
     /**
      * The country name.
      */
-    @Schema(description = "The country name")
+    @Schema(description = "Country name")
     private String country;
 
     /**

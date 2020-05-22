@@ -28,25 +28,25 @@ public class Card implements Serializable {
      * The card identifier.
      */
     @Id
-    @Schema(description = "The card identifier")
+    @Schema(description = "Card identifier")
     private String cardId;
 
     /**
      * The card number.
      */
-    @Schema(description = "The card number")
+    @Schema(description = "Card number")
     private String longNum;
 
     /**
      * The expiration date.
      */
-    @Schema(description = "The card expiration date")
+    @Schema(description = "Expiration date")
     private String expires;
 
     /**
      * The security code.
      */
-    @Schema(description = "The card security code")
+    @Schema(description = "CCV code")
     private String ccv;
 
     /**

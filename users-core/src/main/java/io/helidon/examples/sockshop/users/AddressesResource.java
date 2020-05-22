@@ -4,37 +4,27 @@ import java.util.Collections;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import static io.helidon.examples.sockshop.users.JsonHelpers.embed;
 import static io.helidon.examples.sockshop.users.JsonHelpers.obj;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @ApplicationScoped
 @Path("/addresses")
-public class AddressesResource {
+public class AddressesResource implements AddressApi{
 
     @Inject
     private UserRepository users;
 
-    @GET
-    @Produces(APPLICATION_JSON)
+    @Override
     public Response getAllAddresses() {
         return Response.ok(embed("address", Collections.emptyList())).build();
     }
 
-    @POST
-    @Consumes(APPLICATION_JSON)
-    @Produces(APPLICATION_JSON)
+    @Override
     public Response registerAddress(AddAddressRequest req) {
         Address address = new Address(req.number, req.street, req.city, req.postcode, req.country);
         AddressId id = users.addAddress(req.userID, address);
@@ -42,17 +32,13 @@ public class AddressesResource {
         return Response.ok(obj().add("id", id.toString()).build()).build();
     }
 
-    @GET
-    @Path("{id}")
-    @Produces(APPLICATION_JSON)
-    public Address getAddress(@PathParam("id") AddressId id) {
+    @Override
+    public Address getAddress(AddressId id) {
         return users.getAddress(id);
     }
 
-    @DELETE
-    @Path("{id}")
-    @Produces(APPLICATION_JSON)
-    public Response deleteAddress(@PathParam("id") AddressId id) {
+    @Override
+    public Response deleteAddress(AddressId id) {
         try {
             users.removeAddress(id);
             return status(true);

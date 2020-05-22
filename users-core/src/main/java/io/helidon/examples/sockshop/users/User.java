@@ -30,19 +30,19 @@ public class User implements Serializable {
     private String username;
 
     /**
-     * The first name.
+     * First name.
      */
-    @Schema(description = "User first name")
+    @Schema(description = "First name")
     private String firstName;
 
     /**
-     * The last name.
+     * Last name.
      */
-    @Schema(description = "User last name")
+    @Schema(description = "Last name")
     private String lastName;
 
     /**
-     * The email.
+     * User's email.
      */
     @Schema(description = "User email")
     private String email;

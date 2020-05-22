@@ -1,7 +1,7 @@
 # users-core
 
 This module covers user account storage, provide user login, register and 
-retrival for user, cards and addresses.
+retrieval for user, cards and addresses.
 
 [domain model](./src/main/java/io/helidon/examples/sockshop/users/User.java), 
 [REST API](./src/main/java/io/helidon/examples/sockshop/users/UserResource.java), as well as the
