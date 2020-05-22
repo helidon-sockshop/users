@@ -6,13 +6,16 @@ The Users Service is implemented as a multi-module project containing the follow
 domain model, the REST service itself, as well as the data repository abstraction and its 
 in-memory implementation;
 
-2. **[users-mongo](./users-mongo)** contains the data repository implementation for MongoDB 
+2. **[users-coherence](./users-coherence)** contains the data repository implementation for 
+Coherence backend
+
+3. **[users-mongo](./users-mongo)** contains the data repository implementation for MongoDB 
 backend
 
-3. **[users-mysql](./users-mysql)** contains the data repository implementation for MySQL 
+4. **[users-mysql](./users-mysql)** contains the data repository implementation for MySQL 
 backend (using JPA)
 
-4. **[users-redis](./users-redis)** contains the data repository implementation for Redis 
+5. **[users-redis](./users-redis)** contains the data repository implementation for Redis 
 backend (using Redisson client)
 
 ## API
