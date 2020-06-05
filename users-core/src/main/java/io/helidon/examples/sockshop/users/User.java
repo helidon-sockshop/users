@@ -121,6 +121,11 @@ public class User implements Serializable {
         cards.forEach(this::addCard);
     }
 
+    @JsonbTransient
+    public String getPassword() {
+        return password;
+    }
+
     /**
      * Return the address for the specified address ID.
      *
@@ -226,6 +231,11 @@ public class User implements Serializable {
         return this;
     }
 
+    /**
+     * Return {@code _links} attribute for this entity.
+     *
+     * @return {@code _links} attribute for this entity
+     */
     @JsonbProperty("_links")
     public Links getLinks() {
         return Links.customer(username);

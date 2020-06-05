@@ -20,10 +20,10 @@ import io.helidon.examples.sockshop.users.Address;
 import io.helidon.examples.sockshop.users.AddressId;
 import io.helidon.examples.sockshop.users.Card;
 import io.helidon.examples.sockshop.users.CardId;
+
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
-
 import javax.inject.Inject;
 
 import io.helidon.examples.sockshop.users.User;

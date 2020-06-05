@@ -47,12 +47,12 @@ public class Links extends LinkedHashMap<String, Links.Link> implements Serializ
             .addAttrLink("customer", id, "cards");
     }
 
-    public static Links address(String id) {
-        return new Links().addLink("address", id);
+    public static Links address(AddressId id) {
+        return new Links().addLink("address", id.toString());
     }
 
-    public static Links card(String id) {
-        return new Links().addLink("card", id);
+    public static Links card(CardId id) {
+        return new Links().addLink("card", id.toString());
     }
 
     public static class Link implements Serializable {

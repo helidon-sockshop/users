@@ -64,7 +64,7 @@ public class CustomerResourceIT {
     }
 
     protected UserRepository getUserRepository() {
-        return SERVER.cdiContainer().select(DefaultUserRepository.class).get().createTestUsers();
+        return SERVER.cdiContainer().select(DefaultUserRepository.class).get();
     }
 
     @Test

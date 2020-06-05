@@ -62,7 +62,6 @@ public class MongoUserRepository extends DefaultUserRepository {
 
     @PostConstruct
     void configure() {
-        createTestUsers();
         users.createIndex(Indexes.hashed("username"));
     }
 

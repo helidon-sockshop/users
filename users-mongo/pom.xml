@@ -54,14 +54,14 @@
         <dependency>
             <groupId>io.helidon.examples.sockshop</groupId>
             <artifactId>users-core</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.helidon.examples.sockshop</groupId>
             <artifactId>users-core</artifactId>
             <classifier>tests</classifier>
             <type>test-jar</type>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 

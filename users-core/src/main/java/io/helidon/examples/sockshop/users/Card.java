@@ -142,11 +142,13 @@ public class Card implements Serializable {
         return longNum == null ? null : longNum.substring(longNum.length() - 4);
     }
 
+    /**
+     * Return {@code _links} attribute for this entity.
+     *
+     * @return {@code _links} attribute for this entity
+     */
     @JsonbProperty("_links")
     public Links getLinks() {
-        CardId id = getId();
-        return id != null
-            ? Links.card(id.toString())
-            : Links.card("");
+        return Links.card(getId());
     }
 }

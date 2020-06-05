@@ -18,6 +18,7 @@ package io.helidon.examples.sockshop.users;
 
 import java.io.Serializable;
 
+import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -131,5 +132,15 @@ public class Address implements Serializable {
      */
     public AddressId getId() {
         return new AddressId(user.getUsername(), addressId);
+    }
+
+    /**
+     * Return {@code _links} attribute for this entity.
+     *
+     * @return {@code _links} attribute for this entity
+     */
+    @JsonbProperty("_links")
+    public Links getLinks() {
+        return Links.address(getId());
     }
 }

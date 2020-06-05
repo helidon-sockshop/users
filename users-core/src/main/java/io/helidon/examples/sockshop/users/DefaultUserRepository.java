@@ -137,7 +137,8 @@ public class DefaultUserRepository implements UserRepository {
     /**
      * Load test data into this repository.
      */
-    public UserRepository createTestUsers() {
+    @PostConstruct
+    void createTestUsers() {
         User user = new User("Test", "User", "user@weavesocks.com", "user", "pass");
         user.addCard(new Card("1234123412341234", "12/19", "123"));
         user.addAddress(new Address("123", "Main St", "Springfield", "12123", "USA"));
@@ -162,6 +163,5 @@ public class DefaultUserRepository implements UserRepository {
         randy.addCard(new Card("6543123465437865", "08/23", "042"));
         randy.addAddress(new Address("123", "Mountain St", "Denver", "74765", "USA"));
         register(randy);
-        return this;
     }
 }
