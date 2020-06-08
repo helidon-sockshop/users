@@ -29,8 +29,8 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.users.User;
 import io.helidon.examples.sockshop.users.DefaultUserRepository;
 
-import com.oracle.coherence.cdi.Cache;
-import com.tangosol.net.NamedCache;
+import com.oracle.coherence.cdi.Name;
+import com.tangosol.net.NamedMap;
 import org.eclipse.microprofile.opentracing.Traced;
 
 import static javax.interceptor.Interceptor.Priority.APPLICATION;
@@ -45,10 +45,10 @@ import static javax.interceptor.Interceptor.Priority.APPLICATION;
 @Traced
 public class CoherenceUserRepository extends DefaultUserRepository {
 
-    protected NamedCache<String, User> users;
+    protected NamedMap<String, User> users;
 
     @Inject
-    public CoherenceUserRepository(@Cache("users") NamedCache<String, User> users) {
+    public CoherenceUserRepository(@Name("users") NamedMap<String, User> users) {
         super(users);
         this.users = users;
     }
