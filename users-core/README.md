@@ -34,4 +34,4 @@ which should return 200 response code.
 
 ## License
 
-Apache License 2.0
+The Universal Permissive License (UPL), Version 1.0

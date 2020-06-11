@@ -32,4 +32,4 @@ which should return 200 response code and a list of customers.
 
 ## License
 
-Apache License 2.0
+The Universal Permissive License (UPL), Version 1.0
