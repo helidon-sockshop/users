@@ -7,6 +7,8 @@
 
 package io.helidon.examples.sockshop.users.jpa;
 
+import javax.enterprise.inject.spi.CDI;
+
 import io.helidon.examples.sockshop.users.UserRepository;
 import io.helidon.examples.sockshop.users.UserRepositoryTest;
 import io.helidon.microprofile.server.Server;
@@ -42,6 +44,6 @@ public class JpaUserRepositoryIT extends UserRepositoryTest {
 
     @Override
     protected UserRepository getUserRepository() {
-        return SERVER.cdiContainer().select(UserRepository.class).get();
+        return CDI.current().select(UserRepository.class).get();
     }
 }

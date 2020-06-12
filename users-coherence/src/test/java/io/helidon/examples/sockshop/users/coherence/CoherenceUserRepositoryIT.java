@@ -7,6 +7,8 @@
 
 package io.helidon.examples.sockshop.users.coherence;
 
+import javax.enterprise.inject.spi.CDI;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -41,6 +43,6 @@ class CoherenceUserRepositoryIT extends UserRepositoryTest {
 
     @Override
     public UserRepository getUserRepository() {
-        return SERVER.cdiContainer().select(UserRepository.class).get();
+        return CDI.current().select(UserRepository.class).get();
     }
 }

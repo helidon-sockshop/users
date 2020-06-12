@@ -7,8 +7,12 @@
 
 package io.helidon.examples.sockshop.users;
 
+import javax.enterprise.inject.spi.CDI;
+
 import io.helidon.microprofile.server.Server;
+
 import io.restassured.RestAssured;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +63,7 @@ public class CardsResourceIT
     }
 
     protected UserRepository getUserRepository() {
-        return SERVER.cdiContainer().select(UserRepository.class).get();
+        return CDI.current().select(UserRepository.class).get();
     }
 
     @Test

@@ -8,15 +8,14 @@
 package io.helidon.examples.sockshop.users;
 
 import java.io.Serializable;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import io.helidon.common.CollectionsHelper;
-
 public class Links extends LinkedHashMap<String, Links.Link> implements Serializable {
-    private static Map<String, String> ENTITY_MAP = CollectionsHelper.mapOf("customer", "customers",
-                                                                            "address", "addresses",
-                                                                            "card", "cards");
+    private static final Map<String, String> ENTITY_MAP = Map.of("customer", "customers",
+                                                                 "address", "addresses",
+                                                                 "card", "cards");
 
     private Links addLink(String entity, String id) {
         Link link = Link.to(ENTITY_MAP.get(entity), id);

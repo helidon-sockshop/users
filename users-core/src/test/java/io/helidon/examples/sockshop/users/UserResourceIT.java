@@ -7,19 +7,19 @@
 
 package io.helidon.examples.sockshop.users;
 
+import javax.enterprise.inject.spi.CDI;
+
 import io.helidon.microprofile.server.Server;
 
 import io.restassured.RestAssured;
-import io.restassured.mapper.ObjectMapperType;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static io.restassured.http.ContentType.JSON;
-import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.Matchers.*;
 
 /**
@@ -60,7 +60,7 @@ public class UserResourceIT {
     }
 
     protected UserRepository getUserRepository() {
-        return SERVER.cdiContainer().select(UserRepository.class).get();
+        return CDI.current().select(UserRepository.class).get();
     }
 
     @Test
