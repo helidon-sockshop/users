@@ -7,7 +7,6 @@
 
 package io.helidon.examples.sockshop.users.coherence;
 
-import com.tangosol.net.CacheFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -40,6 +39,7 @@ class CoherenceUserRepositoryIT extends UserRepositoryTest {
         SERVER.stop();
     }
 
+    @Override
     public UserRepository getUserRepository() {
         return SERVER.cdiContainer().select(UserRepository.class).get();
     }
