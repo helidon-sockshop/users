@@ -7,8 +7,6 @@
 
 package io.helidon.examples.sockshop.users.coherence;
 
-import com.tangosol.net.Coherence;
-
 import javax.enterprise.inject.spi.CDI;
 
 import org.junit.jupiter.api.AfterAll;
@@ -41,7 +39,6 @@ class CoherenceUserRepositoryIT extends UserRepositoryTest {
     @AfterAll
     static void stopServer() {
         SERVER.stop();
-        Coherence.closeAll();
     }
 
     @Override
