@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.users.User;
 import io.helidon.examples.sockshop.users.DefaultUserRepository;
 
-import com.oracle.coherence.cdi.Name;
+import com.oracle.coherence.inject.Name;
 import com.tangosol.net.NamedMap;
 import org.eclipse.microprofile.opentracing.Traced;
 
