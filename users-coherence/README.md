@@ -20,7 +20,7 @@ and optionally **persistent** nodes.
 To run Coherence implementation of the service, simply execute
 
 ```bash
-$ docker run -p 7001:7001 helidon/sockshop/users-coherence
+$ docker run -p 7001:7001 ghcr.io/helidon-sockshop/users-coherence
 ``` 
 
 As a basic test, you should be able to perform an HTTP GET against `/customers` endpoint:
