@@ -35,5 +35,7 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DockerUser }}
         DOCKER_PASSWORD: ${{ secrets.DockerPassword }}
-      run: mvn package --file pom.xml -s .github/maven/settings.xml -Pdocker -DenableAssertions=false -DskipTests -Djib.goal=build -Djib.to.auth.username=$DOCKER_USER -Djib.to.auth.password=$DOCKER_PASSWORD
+      run: |
+        echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_USER --password-stdin
+        mvn package --file pom.xml -s .github/maven/settings.xml -Pdocker -DenableAssertions=false -DskipTests -Djib.goal=build
       if: github.event_name == 'push'
