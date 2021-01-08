@@ -32,7 +32,7 @@ $ docker run --rm --name users-db --network sockshop redis:5.0.7
 Finally, you can start the service container in the same network:
 
 ```bash
-$ docker run --network sockshop -p 7001:7001 helidon/sockshop/users-redis
+$ docker run --network sockshop -p 7001:7001 ghcr.io/helidon-sockshop/users-redis
 ``` 
 
 Once the container is up and running, you should be able to access [service API](../README.md#api) 
