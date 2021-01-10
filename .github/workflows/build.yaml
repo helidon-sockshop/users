@@ -37,5 +37,15 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DockerPassword }}
       run: |
         echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_USER --password-stdin
-        mvn package --file pom.xml -s .github/maven/settings.xml -Pdocker -DenableAssertions=false -DskipTests -Djib.goal=build
+        mvn package --file pom.xml -s .github/maven/settings.xml -Pdocker -DenableAssertions=false -DskipTests
+        docker push ghcr.io/${{ github.repository }}-core:latest
+        docker push ghcr.io/${{ github.repository }}-coherence:latest
+        docker push ghcr.io/${{ github.repository }}-mongo:latest
+        docker push ghcr.io/${{ github.repository }}-mysql:latest
+        docker push ghcr.io/${{ github.repository }}-redis:latest
+        docker push ghcr.io/${{ github.repository }}-core:2.2.0
+        docker push ghcr.io/${{ github.repository }}-coherence:2.2.0
+        docker push ghcr.io/${{ github.repository }}-mongo:2.2.0
+        docker push ghcr.io/${{ github.repository }}-mysql:2.2.0
+        docker push ghcr.io/${{ github.repository }}-redis:2.2.0
       if: github.event_name == 'push'
