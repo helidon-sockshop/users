@@ -29,7 +29,7 @@
 
         <!-- dependencies -->
         <version.lib.lombok>1.18.10</version.lib.lombok>
-        <version.lib.redisson>3.12.3</version.lib.redisson>
+        <version.lib.redisson>3.22.0</version.lib.redisson>
         <version.lib.junit>5.6.2</version.lib.junit>
         <version.lib.hamcrest>2.2</version.lib.hamcrest>
         <version.lib.rest-assured>4.3.0</version.lib.rest-assured>
